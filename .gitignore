@@ -1,0 +1,12 @@
+*.pyc
+*~
+__pycache__
+myenv
+db.sqlite3
+/static
+.DS_Store
+club_pic
+news_pic
+staticfiles
+event_pic
+config.py
