@@ -18,6 +18,7 @@ from django.utils.encoding import force_text,force_bytes
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.core.mail import send_mail,EmailMessage
+from django.urls import reverse_lazy
 import random
 import json
 
@@ -162,8 +163,21 @@ class ClubList(APIView):
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
     def get(self,request,*args,**kwargs):
-        data=Club.objects.all().values()
-        return Response(list(data))
+        data=list(Club.objects.all().values())
+        print(data[0])
+        cl=[]
+        for i in range(len(data)):
+            cl.append({
+                'id':data[i]['id'],
+                'name':data[i]['name'],
+                'image_url':request.build_absolute_uri(data[i]['club_pic']),
+                'tagline':data[i]['tagline']
+            })
+        return JsonResponse({
+            'success':True,
+            'message':'club list successfully sent',
+            'club_list':cl,
+        })
 
 class ClubDetails(APIView):
     permission_classes=(permissions.IsAuthenticated,)
@@ -174,7 +188,7 @@ class ClubDetails(APIView):
         print(club_obj,request.user)
         user=request.user
         cm=ClubMember.objects.get(club=club_obj,app_user=user)
-        img_url=str(club_obj.club_pic)
+        img_url=request.build_absolute_uri(club_obj.club_pic.url)
         print(img_url)
         return JsonResponse({
             'success':True,
