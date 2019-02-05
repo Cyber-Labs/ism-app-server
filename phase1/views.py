@@ -43,7 +43,29 @@ class Register(APIView):
         email=request.POST.get('email')
         password=request.POST.get('password')
         if User.objects.filter(username=email).count()!=0:
-            return JsonResponse({'message':'User Already Exist'})
+            user=User.objects.get(username=email)
+            if user.is_active:
+                return JsonResponse({
+                    'sucess':False,
+                    'message':'User already exist'
+                })
+            else:
+                otp=random.randint(999,999999)
+                user.set_password(password)
+                user.save()
+                y=UserProfile.objects.get(user=user)
+                y.name=name
+                y.otp=str(otp)
+                y.save()
+                subject='Activate your Account'
+
+                message='Dear '+name+' Your One time Password for activation of your account is '+str(otp)+'. '
+                temail=EmailMessage(subject,message,to=[email])
+                temail.send()
+                return JsonResponse({
+                    'success':True,
+                    'message':'Email verification has been sent to your email.'
+                    })
         user=User.objects.create_user(username=email,password=password,email=email)
         user.is_active=False
         user.save()
@@ -117,6 +139,11 @@ class ForgotPassword(APIView):
     authentication_classes=(TokenAuthentication,)
     def post(self,request,*args,**kwargs):
         email=request.POST.get('email')
+        if User.objects.filter(username=email).count()==0:
+            return JsonResponse({
+                'success':False,
+                'message':'This user is not registered in app'
+            })
         otp=random.randint(999,999999)
         user=User.objects.get(username=email)
         up=UserProfile.objects.get(user=user)
@@ -163,15 +190,14 @@ class ClubList(APIView):
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
     def get(self,request,*args,**kwargs):
-        data=list(Club.objects.all().values())
-        print(data[0])
+        data=Club.objects.all().values()
         cl=[]
-        for i in range(len(data)):
+        for i in Club.objects.all():
             cl.append({
-                'id':data[i]['id'],
-                'name':data[i]['name'],
-                'image_url':request.build_absolute_uri(data[i]['club_pic']),
-                'tagline':data[i]['tagline']
+                'id':i.id,
+                'name':i.name,
+                'image_url':request.build_absolute_uri(i.club_pic.url),
+                'tagline':i.tagline
             })
         return JsonResponse({
             'success':True,
@@ -185,11 +211,15 @@ class ClubDetails(APIView):
     def get(self,request,*args,**kwargs):
         club=request.GET.get('club_id')
         club_obj=Club.objects.get(id=club)
-        print(club_obj,request.user)
+        #print(club_obj,request.user)
         user=request.user
-        cm=ClubMember.objects.get(club=club_obj,app_user=user)
+        try:
+            cm=ClubMember.objects.get(club=club_obj,app_user=user)
+            im=cm.is_admin
+        except ClubMember.DoesNotExist:
+            im=False
         img_url=request.build_absolute_uri(club_obj.club_pic.url)
-        print(img_url)
+        #print(img_url)
         return JsonResponse({
             'success':True,
             'message':'Club details successfully send',
@@ -199,7 +229,7 @@ class ClubDetails(APIView):
             'tagline':club_obj.tagline,
             'description':club_obj.description,
             'fb_link':club_obj.fb_link,
-            'is_admin':cm.is_admin
+            'is_admin':im
         })
 
 class ClubMemberList(APIView):
@@ -240,11 +270,14 @@ class AddClubMembers(APIView):
         is_admin=request.GET.get('is_admin')
         user=User.objects.get(username=app_user)
         club_obj=Club.objects.get(id=club)
-        cm=ClubMember.objects.get(club=club_obj,app_user=request.user).is_admin
+        try:
+            cm=ClubMember.objects.get(club=club_obj,app_user=request.user).is_admin
+        except ClubMember.DoesNotExist:
+            cm=False
         if cm == False:
             return JsonResponse({
                 'success':False,
-                'message':'This is only for admins of club'
+                'message':'Either User is not registered in app or you have not permission to add members'
             })
         if ClubMember.objects.filter(club=club_obj,app_user=user).count()!=0:
             return JsonResponse({
@@ -267,7 +300,10 @@ class RemoveClubMembers(APIView):
         app_user=request.GET.get('email_id')
         user=User.objects.get(username=app_user)
         club_obj=Club.objects.get(id=club)
-        cm=ClubMember.objects.get(club=club_obj,app_user=request.user).is_admin
+        try:
+            cm=ClubMember.objects.get(club=club_obj,app_user=request.user).is_admin
+        except ClubMember.DoesNotExist:
+            cm=False
         if cm == False:
             return JsonResponse({
                 'success':False,

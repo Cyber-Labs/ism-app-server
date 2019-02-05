@@ -1,1 +1,1 @@
-web: gunicorn {phase1}.wsgi --log-file -
+web: gunicorn ismapp.wsgi
