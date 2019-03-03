@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'phase1',
+    'users',
+    'club',
     'rest_framework',
     'rest_framework.authtoken'
 ]

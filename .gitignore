@@ -10,3 +10,5 @@ news_pic
 staticfiles
 event_pic
 config.py
+runtime.txt
+.idea
