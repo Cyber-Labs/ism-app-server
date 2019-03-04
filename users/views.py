@@ -203,21 +203,3 @@ class PostNews(APIView):
         news=News.objects.create(club=club_obj,title=title,short_desc=short_desc,description=description,news_pic=news_pic)
         news.save()
         return JsonResponse({'message':'news has been posted'})
-
-class CreateEvent(APIView):
-    permission_classes=(permissions.IsAuthenticated,)
-    authentication_classes=(TokenAuthentication,)
-    def post(self,request,*args,**kwargs):
-        club=request.POST.get(ci)
-        title=request.POST.get(title_)
-        short_desc=request.POST.get(sd_)
-        description=request.POST.get(desc_)
-        venue=request.POST.get(venue_)
-        event_pic=request.FILES.get(ep_)
-        event_date=request.POST.get(ed_)
-        #user=request.user
-        club_obj=Club.objects.get(id=club)
-        print(club_obj.id)
-        event=Event.objects.create(club=club_obj,title=title,short_desc=short_desc,description=description,venue=venue,event_pic=event_pic,event_start_date=event_date)
-        event.save()
-        return JsonResponse({'message':'news has been posted'})

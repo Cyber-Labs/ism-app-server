@@ -10,6 +10,7 @@ club={
     'rmsuccess':'member deleted succesfully',
     'fcsuccess':'You have started following club.',
     'ucsuccess':'You have just unfollowed club.',
+    'not_exist':'User is not Registered in app',
 }
 clubs=SimpleNamespace(**club)
 
@@ -25,7 +26,14 @@ user={
     'fpsuccess':'Resest password has been sent to registered email',
     'rpsuccess':'Password Changed Successfully',
     'rpfailure':'OTP not verified',
-    
+
 
 }
 users=SimpleNamespace(**user)
+
+event={
+    'ecsuccess':'Event has been created successfully.',
+    'list':'Event List sent.',
+    'details':'Event Details successfully sent',
+}
+events=SimpleNamespace(**event)

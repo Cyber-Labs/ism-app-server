@@ -29,7 +29,6 @@ class ClubList(APIView):
     authentication_classes=(TokenAuthentication,)
 
     def get(self,request,*args,**kwargs):
-        data=Club.objects.all().values()
         cl=[]
         for i in Club.objects.all():
             cl.append({
@@ -52,7 +51,6 @@ class ClubDetails(APIView):
     def get(self,request,*args,**kwargs):
         club=request.GET.get(ci)
         club_obj=Club.objects.get(id=club)
-        #print(club_obj,request.user)
         user=request.user
         try:
             cm=ClubMember.objects.get(club=club_obj,app_user=user)
@@ -60,7 +58,6 @@ class ClubDetails(APIView):
         except ClubMember.DoesNotExist:
             im=False
         img_url=request.build_absolute_uri(club_obj.club_pic.url)
-        #print(img_url)
         return JsonResponse({
             'success':True,
             'message':clubs.details,
@@ -112,7 +109,15 @@ class AddClubMembers(APIView):
         club=request.GET.get(ci)
         app_user=request.GET.get(ei)
         is_admin=request.GET.get(ia)
-        user=User.objects.get(username=app_user)
+        try:
+            user=User.objects.get(username=app_user)
+        except User.DoesNotExist:
+            user=False
+        if user==False:
+            return JsonResponse({
+                'success':False,
+                'message':clubs.not_exist,
+            })
         club_obj=Club.objects.get(id=club)
         try:
             cm=ClubMember.objects.get(club=club_obj,app_user=request.user).is_admin

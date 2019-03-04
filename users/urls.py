@@ -9,6 +9,5 @@ urlpatterns=[
     path('forgot_password/',view=views.ForgotPassword.as_view()),
     path('reset_password/',view=views.ResetPassword.as_view()),
     path('postnews',view=views.PostNews.as_view()),
-    path('create_event',view=views.CreateEvent.as_view()),
     
 ]

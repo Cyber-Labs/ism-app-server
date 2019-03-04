@@ -12,5 +12,7 @@ desc_='description'
 np_='news_pic'
 venue_='venue'
 ep_='event_pic'
-ed_='event_date'
+esd_='event_start_date'
+eed_='event_end_date'
+event_id_='event_id'
 

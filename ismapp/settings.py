@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'club',
+    'events',
     'rest_framework',
     'rest_framework.authtoken'
 ]
