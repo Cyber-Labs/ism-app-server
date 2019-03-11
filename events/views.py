@@ -42,7 +42,42 @@ class CreateEvent(APIView):
         print(club_obj.id)
         event=Event.objects.create(club=club_obj,title=title,short_desc=short_desc,description=description,venue=venue,event_pic=event_pic,event_start_date=event_start_date,event_end_date=event_end_date)
         event.save()
-        return JsonResponse({'message':events.ecsuccess})
+        return JsonResponse({
+            'success':True,
+            'message':events.ecsuccess
+            })
+
+class EditEvent(APIView):
+    """  
+    This allows the admin of club to edit a event.
+    """
+    permission_classes=(permissions.IsAuthenticated,)
+    authentication_classes=(TokenAuthentication,)
+    def post(self,request,*args,**kwargs):
+        event_id=request.GET.get(event_id_)
+        club=request.POST.get(ci)
+        title=request.POST.get(title_)
+        short_desc=request.POST.get(sd_)
+        description=request.POST.get(desc_)
+        venue=request.POST.get(venue_)
+        event_pic=request.FILES.get(ep_)
+        event_start_date=request.POST.get(esd_)
+        event_end_date=request.POST.get(eed_)
+        club_obj=Club.objects.get(id=club)
+        event_obj=Event.objects.get(id=event_id)
+        event_obj.club=club_obj
+        event_obj.title=title
+        event_obj.short_desc=short_desc
+        event_obj.description=description
+        event_obj.venue=venue
+        event_obj.event_pic=event_pic
+        event_obj.event_start_date=event_start_date
+        event_obj.event_end_date=event_end_date
+        event_obj.save()
+        return JsonResponse({
+            'success':True,
+            'message':events.ecsuccess
+            })
 
 class EventList(APIView):
     """  
