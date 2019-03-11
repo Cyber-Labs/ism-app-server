@@ -52,7 +52,7 @@ class EventList(APIView):
     authentication_classes=(TokenAuthentication,)
     def get(self,request,*args,**kwargs):
         el=[]
-        for i in Event.objects.all():
+        for i in Event.objects.order_by('event_start_date'):
             club_obj=Club.objects.get(id=i.club_id)
             el.append({
                 'id':i.id,
