@@ -25,6 +25,9 @@ import random
 import json
 
 class Welcome(APIView):
+    """ 
+    This class shows a welcome message on starting of app
+    """
     permission_classes=(permissions.AllowAny,)
     def get(self,request,*args,**kwargs):
         t=WelcomeModel.objects.get(id=1);
@@ -38,6 +41,10 @@ class Welcome(APIView):
         })
 
 class Register(APIView):
+    """  
+    This class is for registration of user in app by sending a verification email.If user is already 
+    registered in app then it will display a message showing already registered.
+    """
     permission_classes=(permissions.AllowAny,)
     authentication_classes=(TokenAuthentication,)
     def post(self,request,*args,**kwargs):
@@ -89,6 +96,10 @@ class Register(APIView):
 
 
 class VerifyAccount(APIView):
+    """ 
+    This class is for verifying the email of the user by entering the otp
+    in the app.
+    """
     permission_classes=(permissions.AllowAny,)
     authentication_classes=(TokenAuthentication,)
     def post(self,request,*args,**kwargs):
@@ -115,6 +126,9 @@ class VerifyAccount(APIView):
             })
 
 class Login(APIView):
+    """  
+    This class is for logging users in the app.
+    """
     permission_classes=(permissions.AllowAny,)
     authentication_classes=(TokenAuthentication,)
     def post(self,request,*args,**kwargs):
@@ -137,6 +151,10 @@ class Login(APIView):
         })
 
 class ForgotPassword(APIView):
+    """
+    In case the user forgots its password then it sends a otp for 
+    resetting the password.
+    """
     permission_classes=(permissions.AllowAny,)
     authentication_classes=(TokenAuthentication,)
     def post(self,request,*args,**kwargs):
@@ -162,6 +180,10 @@ class ForgotPassword(APIView):
         })
 
 class ResetPassword(APIView):
+    """  
+    This class verifies the otp for resetting password and allow users to 
+    set new password.
+    """
     permission_classes=(permissions.AllowAny,)
     authentication_classes=(TokenAuthentication,)
     def post(self,request,*args,**kwargs):

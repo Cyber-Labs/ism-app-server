@@ -25,6 +25,9 @@ import json
 
 
 class ClubList(APIView):
+    """  
+    This class is for showing all the club list.
+    """
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
 
@@ -45,6 +48,9 @@ class ClubList(APIView):
 
 
 class ClubDetails(APIView):
+    """  
+    This class is for showing the detail of a specific club.
+    """
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
 
@@ -72,6 +78,9 @@ class ClubDetails(APIView):
 
 
 class ClubMemberList(APIView):
+    """  
+    This class is for showing the member list of a specific club.
+    """
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
 
@@ -102,6 +111,10 @@ class ClubMemberList(APIView):
 
 
 class AddClubMembers(APIView):
+    """  
+    This class provide the access of adding a member in a club to the admin
+    of clubs.
+    """
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
 
@@ -109,6 +122,10 @@ class AddClubMembers(APIView):
         club=request.GET.get(ci)
         app_user=request.GET.get(ei)
         is_admin=request.GET.get(ia)
+        if is_admin=='true':
+            is_admin=True
+        if is_admin=='false':
+            is_admin=False
         try:
             user=User.objects.get(username=app_user)
         except User.DoesNotExist:
@@ -142,6 +159,9 @@ class AddClubMembers(APIView):
 
 
 class RemoveClubMembers(APIView):
+    """  
+    This class allows the admin of clubs to remove members from club.
+    """
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
     def get(self,request,*args,**kwargs):
@@ -166,6 +186,9 @@ class RemoveClubMembers(APIView):
         })
 
 class FollowClub(APIView):
+    """  
+    This allows the users to follow a club to see its newsfeed first.
+    """
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
     def post(self,request,*args,**kwargs):
@@ -177,6 +200,9 @@ class FollowClub(APIView):
         return JsonResponse({'message':clubs.fcsuccess})
 
 class UnFollowClub(APIView):
+    """  
+    This allows the users to unfollow a club.
+    """
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
     def post(self,request,*args,**kwargs):

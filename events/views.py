@@ -24,6 +24,9 @@ import random
 import json
 
 class CreateEvent(APIView):
+    """  
+    This allows the admin of club to add a event.
+    """
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
     def post(self,request,*args,**kwargs):
@@ -42,14 +45,18 @@ class CreateEvent(APIView):
         return JsonResponse({'message':events.ecsuccess})
 
 class EventList(APIView):
+    """  
+    This shows the list of all events of all clubs.
+    """
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
     def get(self,request,*args,**kwargs):
         el=[]
         for i in Event.objects.all():
+            club_obj=Club.objects.get(id=i.club_id)
             el.append({
                 'id':i.id,
-                'club_id':i.club_id,
+                'club_name':club_obj.name,
                 'title':i.title,
                 'short_desc':i.short_desc,
                 'description':i.description,
@@ -65,16 +72,20 @@ class EventList(APIView):
         })
 
 class EventDetails(APIView):
+    """  
+    This provides the details of particular event.
+    """
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
     def get(self,request,*args,**kwargs):
         event_id=request.GET.get(event_id_)
         event_obj=Event.objects.get(id=event_id)
+        club_obj=Club.objects.get(id=event_obj.club_id)
         img_url=request.build_absolute_uri(event_obj.event_pic.url)
         return JsonResponse({
             'success':True,
             'message':clubs.details,
-            'club_id':event_obj.club_id,
+            'club_name':club_obj.name,
             'title':event_obj.title,
             'short_desc':event_obj.short_desc,
             'description':event_obj.description,
