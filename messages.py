@@ -35,5 +35,6 @@ event={
     'ecsuccess':'Event has been created successfully.',
     'list':'Event List sent.',
     'details':'Event Details successfully sent',
+    'delete':'Event has been deleted.',
 }
 events=SimpleNamespace(**event)
