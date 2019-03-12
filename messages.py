@@ -36,5 +36,6 @@ event={
     'list':'Event List sent.',
     'details':'Event Details successfully sent',
     'delete':'Event has been deleted.',
+    'club_event_list':'Event of this club is sent.'
 }
 events=SimpleNamespace(**event)
