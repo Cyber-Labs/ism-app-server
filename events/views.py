@@ -113,11 +113,11 @@ class EventList(APIView):
         return JsonResponse({
             'success':True,
             'message':events.list,
-            'club_list':el,
+            'event_list':el,
         })
 
 class EventDetails(APIView):
-    """  
+    """
     This provides the details of particular event.
     """
     permission_classes=(permissions.IsAuthenticated,)
