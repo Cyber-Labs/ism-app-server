@@ -74,6 +74,37 @@ class EditEvent(APIView):
             'message':events.ecsuccess
             })
 
+class ClubEvent(APIView):
+    """
+    This class is used for accesing the details of events organised
+    by the paricular club.
+    """
+    permission_classes=(permissions.IsAuthenticated,)
+    authentication_classes=(TokenAuthentication,)
+    def get(self,request,*args,**kwargs):
+        club_id_=request.GET.get(ci)
+        el=[]
+        for i in Event.objects.order_by('event_start_date'):
+            club_obj=Club.objects.get(id=i.club_id)
+            if int(i.club_id)==int(club_id_):
+                el.append({
+                    'id':i.id,
+                    'club_name':club_obj.name,
+                    'title':i.title,
+                    'short_desc':i.short_desc,
+                    'description':i.description,
+                    'venue':i.venue,
+                    'event_pic_url':request.build_absolute_uri(i.event_pic.url),
+                    'event_start_date':i.event_start_date,
+                    'event_end_date':i.event_end_date,
+                })
+        return JsonResponse({
+            'success':True,
+            'message':events.club_event_list,
+            'event_list':el,
+        })
+
+
 class EventDelete(APIView):
     """  
     This class is for deleting a existing event.
