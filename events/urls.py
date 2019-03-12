@@ -7,5 +7,6 @@ urlpatterns=[
     path('list/',view=views.EventList.as_view()),
     path('details/',view=views.EventDetails.as_view()),
     path('edit',view=views.EditEvent.as_view()),
+    path('delete',view=views.EventDelete.as_view()),
 
 ]

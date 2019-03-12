@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users',
     'club',
     'events',
+    'news',
     'rest_framework',
     'rest_framework.authtoken'
 ]
