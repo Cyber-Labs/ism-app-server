@@ -8,9 +8,7 @@ import datetime
 
 class News(models.Model):
     club=models.ForeignKey(Club,on_delete=models.CASCADE)
-    title=models.CharField(max_length=100,default='')
     news_pic=models.ImageField(upload_to='news_pic',blank=True)
-    short_desc=models.CharField(max_length=500,default='')
     description=models.CharField(max_length=2000,default='')
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)

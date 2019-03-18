@@ -15,4 +15,5 @@ ep_='event_pic'
 esd_='event_start_date'
 eed_='event_end_date'
 event_id_='event_id'
+news_id_='news_id'
 
