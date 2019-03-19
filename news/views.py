@@ -16,19 +16,43 @@ from django.core.mail import send_mail,EmailMessage
 from random import randint
 
 class PostNews(APIView):
+    """  
+    This api is for creating news.
+    """
     permission_classes=(permissions.IsAuthenticated,)
     authentication_classes=(TokenAuthentication,)
     def post(self,request,*args,**kwargs):
         club=request.POST.get(ci)
-        title=request.POST.get(title_)
-        short_desc=request.POST.get(sd_)
         description=request.POST.get(desc_)
         news_pic=request.FILES.get(np_)
         #user=request.user
         club_obj=Club.objects.get(id=club)
         news=News.objects.create(club=club_obj,title=title,short_desc=short_desc,description=description,news_pic=news_pic)
         news.save()
-        return JsonResponse({'message':'news has been posted'})
+        return JsonResponse({
+            'success':True,
+            'message':news.nsuccess,        
+        })
+
+class EditNews(APIView):
+    """  
+    This api is for  news.
+    """
+    permission_classes=(permissions.IsAuthenticated,)
+    authentication_classes=(TokenAuthentication,)
+    def post(self,request,*args,**kwargs):
+        news_id=request.POST.get(news_id_)
+        club=request.POST.get(ci)
+        description=request.POST.get(desc_)
+        news_pic=request.FILES.get(np_)
+        #user=request.user
+        club_obj=Club.objects.get(id=club)
+        news=News.objects.create(club=club_obj,title=title,short_desc=short_desc,description=description,news_pic=news_pic)
+        news.save()
+        return JsonResponse({
+            'success':True,
+            'message':news.esucess,
+        })
 
 
 

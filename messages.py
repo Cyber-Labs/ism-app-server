@@ -39,3 +39,9 @@ event={
     'club_event_list':'Event of this club is sent.'
 }
 events=SimpleNamespace(**event)
+
+new={
+    'nsuccess':'News has been posted successfully',
+
+}
+news=SimpleNamespace(**new)
