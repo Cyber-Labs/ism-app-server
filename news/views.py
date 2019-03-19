@@ -51,7 +51,22 @@ class EditNews(APIView):
         news.save()
         return JsonResponse({
             'success':True,
-            'message':news.esucess,
+            'message':news.nsuccess,
+        })
+
+class NewsDelete(APIView):
+    """  
+    This class is for deleting a existing news.
+    """
+    permission_classes=(permissions.IsAuthenticated,)
+    authentication_classes=(TokenAuthentication,)
+    def get(self,request,*args,**kwargs):
+        news_id=request.GET.get(news_id_)
+        news_obj=News.objects.get(id=news_id)
+        news_obj.delete()
+        return JsonResponse({
+            'success':True,
+            'message':news.delete,
         })
 
 

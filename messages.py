@@ -42,6 +42,7 @@ events=SimpleNamespace(**event)
 
 new={
     'nsuccess':'News has been posted successfully',
+    'delete':'News has been deleted'
 
 }
 news=SimpleNamespace(**new)
