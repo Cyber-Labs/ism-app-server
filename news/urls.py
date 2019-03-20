@@ -6,4 +6,5 @@ urlpatterns=[
     path('edit_news/',view=views.EditNews.as_view()),
     path('delete/',view=views.NewsDelete.as_view()),
     path('list/',view=views.NewsList.as_view()),
+    path('details/',view=views.NewsDetails.as_view()),
 ]

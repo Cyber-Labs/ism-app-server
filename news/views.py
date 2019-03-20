@@ -85,19 +85,49 @@ class NewsList(APIView):
                 pic=request.build_absolute_uri(i.news_pic.url)
             else:
                 pic=None
-
+            time=i.created_date
+            cd=time.strftime('%Y')+'-'+time.strftime('%m')+'-'+time.strftime('%d')
+            ct=time.strftime('%H')+':'+time.strftime('%M')+':'+time.strftime('%S')
             nl.append({
                 'id':i.id,
                 'club_name':club_obj.name,
                 'description':i.description,
                 'news_pic_url':pic,
-                'created_date':i.created_date,
+                'created_date':cd,
+                'created_time':ct,
             })
+            print(i.created_date)
         return JsonResponse({
             'success':True,
             'message':news.list,
             'news_list':nl,
         })
 
+class NewsDetails(APIView):
+    """
+    This provides the details of particular news.
+    """
+    permission_classes=(permissions.IsAuthenticated,)
+    authentication_classes=(TokenAuthentication,)
+    def get(self,request,*args,**kwargs):
+        news_id=request.GET.get(news_id_)
+        news_obj=News.objects.get(id=news_id)
+        club_obj=Club.objects.get(id=news_obj.club_id)
+        if news_obj.news_pic:
+            img_url=request.build_absolute_uri(news_obj.news_pic.url)
+        else:
+            img_url=None
 
+        time=news_obj.created_date
+        cd=time.strftime('%Y')+'-'+time.strftime('%m')+'-'+time.strftime('%d')
+        ct=time.strftime('%H')+':'+time.strftime('%M')+':'+time.strftime('%S')
+        return JsonResponse({
+            'success':True,
+            'message':clubs.details,
+            'club_name':club_obj.name,
+            'description':news_obj.description,
+            'news_pic_url':img_url,
+            'created_date':cd,
+            'created_time':ct,
+        })
 
