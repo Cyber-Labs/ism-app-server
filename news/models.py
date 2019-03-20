@@ -14,4 +14,4 @@ class News(models.Model):
     modified_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return self.description

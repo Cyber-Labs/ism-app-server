@@ -1,6 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 from rest_framework import viewsets,generics,permissions
 from news.models import *
+from club.models import Club
 from messages import *
 from keys import *
 from django.contrib.auth.models import User
@@ -27,8 +28,8 @@ class PostNews(APIView):
         news_pic=request.FILES.get(np_)
         #user=request.user
         club_obj=Club.objects.get(id=club)
-        news=News.objects.create(club=club_obj,title=title,short_desc=short_desc,description=description,news_pic=news_pic)
-        news.save()
+        new=News.objects.create(club=club_obj,description=description,news_pic=news_pic)
+        new.save()
         return JsonResponse({
             'success':True,
             'message':news.nsuccess,        
@@ -47,7 +48,7 @@ class EditNews(APIView):
         news_pic=request.FILES.get(np_)
         #user=request.user
         club_obj=Club.objects.get(id=club)
-        news=News.objects.create(club=club_obj,title=title,short_desc=short_desc,description=description,news_pic=news_pic)
+        news=News.objects.create(club=club_obj,description=description,news_pic=news_pic)
         news.save()
         return JsonResponse({
             'success':True,
@@ -67,6 +68,35 @@ class NewsDelete(APIView):
         return JsonResponse({
             'success':True,
             'message':news.delete,
+        })
+
+class NewsList(APIView):
+    """  
+    This shows the list of all news of all clubs.
+    """
+    permission_classes=(permissions.IsAuthenticated,)
+    authentication_classes=(TokenAuthentication,)
+    def get(self,request,*args,**kwargs):
+        nl=[]
+        for i in News.objects.order_by('created_date'):
+            club_obj=Club.objects.get(id=i.club_id)
+            print(i.news_pic)
+            if i.news_pic:
+                pic=request.build_absolute_uri(i.news_pic.url)
+            else:
+                pic=None
+
+            nl.append({
+                'id':i.id,
+                'club_name':club_obj.name,
+                'description':i.description,
+                'news_pic_url':pic,
+                'created_date':i.created_date,
+            })
+        return JsonResponse({
+            'success':True,
+            'message':news.list,
+            'news_list':nl,
         })
 
 
