@@ -130,6 +130,10 @@ class EventList(APIView):
         el=[]
         for i in Event.objects.order_by('event_start_date'):
             club_obj=Club.objects.get(id=i.club_id)
+            if i.event_pic:
+                pic=request.build_absolute_uri(i.event_pic.url)
+            else:
+                pic=None
             el.append({
                 'id':i.id,
                 'club_name':club_obj.name,
@@ -137,7 +141,7 @@ class EventList(APIView):
                 'short_desc':i.short_desc,
                 'description':i.description,
                 'venue':i.venue,
-                'event_pic_url':request.build_absolute_uri(i.event_pic.url),
+                'event_pic_url':pic,
                 'event_start_date':i.event_start_date,
                 'event_end_date':i.event_end_date,
             })
