@@ -7,4 +7,5 @@ urlpatterns=[
     path('delete/',view=views.NewsDelete.as_view()),
     path('list/',view=views.NewsList.as_view()),
     path('details/',view=views.NewsDetails.as_view()),
+    path('club_news/',view=views.ClubNews.as_view()),
 ]

@@ -131,3 +131,37 @@ class NewsDetails(APIView):
             'created_time':ct,
         })
 
+class ClubNews(APIView):
+    """
+    This class is used for accesing the details of news
+    by the paricular club.
+    """
+    permission_classes=(permissions.IsAuthenticated,)
+    authentication_classes=(TokenAuthentication,)
+    def get(self,request,*args,**kwargs):
+        club_id_=request.GET.get(ci)
+        nl=[]
+        for i in News.objects.order_by('created_date'):
+            club_obj=Club.objects.get(id=i.club_id)
+            if int(i.club_id)==int(club_id_):
+                if i.news_pic:
+                    pic=request.build_absolute_uri(i.news_pic.url)
+                else:
+                    pic=None
+                time=i.created_date
+                cd=time.strftime('%Y')+'-'+time.strftime('%m')+'-'+time.strftime('%d')
+                ct=time.strftime('%H')+':'+time.strftime('%M')+':'+time.strftime('%S')
+                nl.append({
+                    'id':i.id,
+                    'club_name':club_obj.name,
+                    'description':i.description,
+                    'news_pic_url':pic,
+                    'created_date':cd,
+                    'created_time':ct,
+                })
+        return JsonResponse({
+            'success':True,
+            'message':events.club_event_list,
+            'news_list':nl,
+        })
+
