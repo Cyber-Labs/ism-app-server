@@ -35,7 +35,7 @@ class CreateEvent(APIView):
             event_end_date=event_start_date
         club_obj=Club.objects.get(id=club)
         print(club_obj.id)
-        event=Event.objects.create(club=club_obj,title=title,short_desc=short_desc,description=description,venue=venue,event_pic=event_pic,event_start_date=event_start_date,event_end_date=event_end_date)
+        event=Event.objects.create(club=club_obj,title=title,description=description,venue=venue,event_pic=event_pic,event_start_date=event_start_date,event_end_date=event_end_date)
         event.save()
         return JsonResponse({
             'success':True,
@@ -62,7 +62,7 @@ class EditEvent(APIView):
         event_obj=Event.objects.get(id=event_id)
         event_obj.club=club_obj
         event_obj.title=title
-        event_obj.short_desc=short_desc
+        #event_obj.short_desc=short_desc
         event_obj.description=description
         event_obj.venue=venue
         event_obj.event_pic=event_pic
@@ -91,7 +91,7 @@ class ClubEvent(APIView):
                     'id':i.id,
                     'club_name':club_obj.name,
                     'title':i.title,
-                    'short_desc':i.short_desc,
+                    'short_desc':"This is removed from model",
                     'description':i.description,
                     'venue':i.venue,
                     'event_pic_url':request.build_absolute_uri(i.event_pic.url),
@@ -138,7 +138,7 @@ class EventList(APIView):
                 'id':i.id,
                 'club_name':club_obj.name,
                 'title':i.title,
-                'short_desc':i.short_desc,
+                'short_desc':"This is removed from model",
                 'description':i.description,
                 'venue':i.venue,
                 'event_pic_url':pic,
@@ -167,7 +167,7 @@ class EventDetails(APIView):
             'message':clubs.details,
             'club_name':club_obj.name,
             'title':event_obj.title,
-            'short_desc':event_obj.short_desc,
+            'short_desc':"This is removed from model.",
             'description':event_obj.description,
             'venue':event_obj.venue,
             'event_pic_url':img_url,

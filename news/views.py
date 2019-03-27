@@ -48,8 +48,8 @@ class EditNews(APIView):
         news_pic=request.FILES.get(np_)
         #user=request.user
         club_obj=Club.objects.get(id=club)
-        news=News.objects.create(club=club_obj,description=description,news_pic=news_pic)
-        news.save()
+        new=News.objects.create(club=club_obj,description=description,news_pic=news_pic)
+        new.save()
         return JsonResponse({
             'success':True,
             'message':news.nsuccess,
